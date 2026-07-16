@@ -8,7 +8,7 @@ import unicodedata
 from fontTools.ttLib import TTFont
 
 REFERENCE = "Reference/Inter-Variable.ttf"
-TARGET = "Sans/fonts/variable/DMSans[opsz,wght].ttf"
+TARGET = "Sans/fonts/variable/DoMoSans[opsz,wght].ttf"
 
 VIETNAMESE_CODEPOINTS = list(range(0x1EA0, 0x1EFA)) + [
     0x0309,  # hookabovecomb
