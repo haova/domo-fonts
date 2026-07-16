@@ -85,8 +85,30 @@ Kết quả: **90 glyph** còn thiếu, gồm:
 
 Vẽ `hookabovecomb`, `dotbelowcomb`, đồng bộ phong cách (độ dày nét, khoảng cách, chiều cao) với mark có sẵn (`acutecomb`, `gravecomb`, `tildecomb`).
 
-- Phải vẽ ở **đủ các master cực trị** của designspace hiện tại: Thin/ExtraBlack × 9pt/40pt × Roman/Italic — để nội suy đúng trên toàn bộ trục `opsz`/`wght`/`ital`, không chỉ vẽ 1 master rồi để tool tự suy diễn sai ở các trục còn lại.
+- Phải vẽ ở **đủ 12 master thật** khai báo trong `Sans/Source/DoMoSans.glyphs` (và tương tự trong bản Italic) — không phải suy đoán theo tên hiển thị ở `stat:` trong `config.yaml`:
+  - `opsz`: chỉ có master ở **9pt, 24pt, 40pt** (xem `name = "9pt Thin"`, `"24pt Thin"`, `"40pt Thin"`... trong file `.glyphs`) — **không có master riêng ở 14pt/18pt/36pt**, những mốc đó chỉ là tên hiển thị trong STAT, giá trị thực được nội suy.
+  - `wght`: chỉ có master ở **Thin (100), Light (300), Regular (400), ExtraBlack (1000)** — **không có master riêng ở ExtraLight/Medium/SemiBold/Bold/ExtraBold/Black**, các weight này cũng chỉ là tên hiển thị trong STAT, nội suy từ 4 master trên.
+  - → Tổng cộng **3 opsz × 4 wght = 12 master** mỗi file nguồn (Roman/Italic), **không phải** lưới đầy đủ 6 opsz × 10 wght. Vẽ dư master ở các mốc không tồn tại (vd tự thêm master "18pt Bold") sẽ đi ngược cấu trúc designspace hiện có và không cần thiết — chỉ cần đảm bảo 2 mark mới + 90 glyph thiếu tồn tại đúng ở 12 master thật này, phần còn lại Glyphs tự nội suy qua `Axis Mappings` (custom parameter, ánh xạ user-value → design-value phi tuyến) đã khai báo sẵn.
+  - Xác minh nhanh số master: `grep -n 'name = "[0-9]*pt' Sans/Source/DoMoSans.glyphs`.
 - **Điều kiện bắt buộc để nội suy khớp (interpolation-compatible)**: cùng số lượng path/điểm, cùng thứ tự điểm, cùng hướng vẽ, cùng số lượng và tên anchor ở **mọi master**. Sai 1 điểm ở 1 master là đủ để các instance trung gian bị méo hoặc build lỗi.
+
+#### Kết quả phân tích font tham khảo (Inter) cho `dotbelowcomb`
+
+Đã dùng `Scripts/gen_dotbelowcomb.py` để đo đạc `Reference/Inter-Variable.ttf` (fontTools + `varLib.instancer`) và sinh glyph `dotbelowcomb` tự động cho cả `DoMoSans.glyphs`/`-Italic.glyphs`. Ghi lại đây các đặc điểm thật đã phát hiện, để lần sau không phải dò lại:
+
+- **Trục của Inter**: `opsz` chỉ có range **14–32** (default 14), `wght` range **100–900** (default 400) — hẹp hơn DoMoSans (`opsz` 9–40, `wght` 100–1000). Script tự `clamp` toạ độ 9pt/40pt và wght 1000 về biên gần nhất của Inter trước khi instantiate, vì Inter không có dữ liệu thật ngoài range này (số đo ở các mốc bị clamp chỉ là xấp xỉ, không phải đo trực tiếp đúng opsz/wght đó).
+- **Glyph `"i"` của Inter là composite**: `dotlessi` + component `uni0307` (COMBINING DOT ABOVE, U+0307) — không phải 1 outline liền như trong DoMoSans. Phải dùng `DecomposingRecordingPen` để lấy được contour thật (component không tự "explode" nếu chỉ gọi `draw()` với pen thường).
+- **Glyph dấu chấm dưới của Inter tên là `dotbelow`** (không phải `dotbelowcomb`), map từ U+0323 (COMBINING DOT BELOW). Có biến thể `dotbelow.ss07` (stylistic set) không dùng tới.
+- **Ty lệ đo được** (`ratio = gap_below / gap_above`, tức khoảng cách baseline→đỉnh chấm dưới so với khoảng cách đỉnh thân chữ→đáy chấm trên), tại 12 toạ độ (opsz, wght) trùng master DoMoSans:
+
+  | opsz \ wght | 100 (Thin) | 300 (Light) | 400 (Regular) | 1000 (ExtraBlack) |
+  |---|---|---|---|---|
+  | 9pt  | 0.859 | 0.942 | 1.000 | 1.000 |
+  | 24pt | 0.940 | 0.976 | 1.000 | 1.273 |
+  | 40pt | 1.000 | 1.000 | 1.000 | 1.629 |
+
+  Nhận xét: ratio tăng dần theo wght (đặc biệt nhảy vọt ở ExtraBlack/wght=1000, do 2 lý do cộng dồn — Inter's Black thật sự đặt dấu xa hơn + bị clamp vì 1000 ngoài range 900 của Inter) — nên các giá trị ExtraBlack (1.273, 1.629) đáng ngờ hơn, cần soi bằng mắt trong Glyphs App kỹ hơn các ô còn lại trước khi build.
+- **Kết quả áp cho DoMoSans**: dùng `gap_above` đo trực tiếp từ vector thật của glyph `"i"` DoMoSans (không qua Inter) nhân với ratio ở trên, ra vị trí đỉnh chấm dưới (`y = -gap_below`) cho từng master. Hình dạng chấm giữ nguyên 100% từ shape có sẵn trong `"i"` (copy, dịch chuyển, không scale).
 - Kiểm tra bằng công cụ có sẵn trong app (Glyphs: "Show Interpolation" / cảnh báo ngoặc đỏ khi kéo thanh trượt giữa các master) trước khi build, không đợi build xong mới phát hiện.
 
 ### 2.3. Thiết lập anchor system

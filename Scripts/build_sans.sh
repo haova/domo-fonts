@@ -41,8 +41,17 @@ cd "$ROOT_DIR/Sans/Source"
 gftools builder config.yaml
 
 echo
+echo "=== Cap nhat unicode-range trong preview.html theo cmap that vua build ==="
+"$VENV_DIR/bin/python" "$ROOT_DIR/Scripts/gen_preview_unicode_range.py"
+
+echo
+echo "=== Cap nhat FONT_METRICS trong preview.html theo bang metrics that vua build ==="
+"$VENV_DIR/bin/python" "$ROOT_DIR/Scripts/gen_preview_font_metrics.py"
+
+echo
 echo "=== Xong. Output: ==="
 echo "  Sans/fonts/variable/"
 echo "  Sans/fonts/ttf/"
 echo "  Sans/fonts/otf/"
 echo "  Sans/fonts/webfonts/"
+echo "  preview.html (unicode-range + font metrics da dong bo)"

@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>DoMo Sans — Việt hoá Preview</title>
+<style>
+/* unicode-range lấy đúng từ cmap thật của font đã build (fontTools getBestCmap()), không tự chỉnh sửa —
+   khoảng trống ở U+1EA0-1EF9 (Vietnamese) tự động không nằm trong range vì cmap thật không có, đúng cơ chế
+   Google Fonts dùng (unicode-range chính xác per subset). Nhờ vậy trình duyệt tự KHÔNG chọn DoMoSans cho các
+   ký tự ngoài range này, tự rơi xuống "Tofu" trong font-family stack — không cần JS can thiệp ép font. */
+@font-face {
+  font-family: "DoMoSans";
+  src: url("Sans/fonts/webfonts/DoMoSans[opsz,wght].woff2") format("woff2-variations"),
+       url("Sans/fonts/webfonts/DoMoSans[opsz,wght].woff2") format("woff2");
+  font-weight: 100 1000;
+  font-stretch: 75% 125%;
+  font-style: normal;
+  unicode-range: /* AUTOGEN:ROMAN:START */U+D, U+20-7E, U+A0-AC, U+AE-107, U+10A-11B, U+11E-123, U+126-133, U+136-137, U+139-148, U+14A-15B, U+15E-165, U+168-17E, U+18F, U+192, U+1FC-1FD, U+218-21B, U+237, U+259, U+2C6-2C7, U+2D8-2DD, U+300-304, U+306-308, U+30A-30C, U+312, U+326-328, U+3C0, U+1E80-1E85, U+1E9E, U+1EA0-1EA1, U+1EAC-1EAD, U+1EB6-1EB9, U+1EBC-1EBD, U+1EC6-1EC7, U+1ECA-1ECD, U+1ED8-1ED9, U+1EE4-1EE5, U+1EF2-1EF5, U+1EF8-1EF9, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+2074, U+20A8, U+20AC, U+20B9-20BA, U+20BD, U+2113, U+2122, U+2126, U+212E, U+2190-2199, U+2202, U+2206, U+220F, U+2211-2212, U+2215, U+221A, U+221E, U+222B, U+2248, U+2260, U+2264-2265, U+25CA, U+FB01-FB02/* AUTOGEN:ROMAN:END */;
+}
+@font-face {
+  font-family: "DoMoSans";
+  src: url("Sans/fonts/webfonts/DoMoSans-Italic[opsz,wght].woff2") format("woff2-variations"),
+       url("Sans/fonts/webfonts/DoMoSans-Italic[opsz,wght].woff2") format("woff2");
+  font-weight: 100 1000;
+  font-stretch: 75% 125%;
+  font-style: italic;
+  unicode-range: /* AUTOGEN:ITALIC:START */U+D, U+20-7E, U+A0-AC, U+AE-107, U+10A-11B, U+11E-123, U+126-133, U+136-137, U+139-148, U+14A-15B, U+15E-165, U+168-17E, U+18F, U+192, U+1FC-1FD, U+218-21B, U+237, U+259, U+2C6-2C7, U+2D8-2DD, U+300-304, U+306-308, U+30A-30C, U+312, U+326-328, U+3C0, U+1E80-1E85, U+1E9E, U+1EA0-1EA1, U+1EAC-1EAD, U+1EB6-1EB9, U+1EBC-1EBD, U+1EC6-1EC7, U+1ECA-1ECD, U+1ED8-1ED9, U+1EE4-1EE5, U+1EF2-1EF5, U+1EF8-1EF9, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+2074, U+20A8, U+20AC, U+20B9-20BA, U+20BD, U+2113, U+2122, U+2126, U+212E, U+2190-2199, U+2202, U+2206, U+220F, U+2211-2212, U+2215, U+221A, U+221E, U+222B, U+2248, U+2260, U+2264-2265, U+25CA, U+FB01-FB02/* AUTOGEN:ITALIC:END */;
+}
+/* Tofu fallback — mọi glyph không có trong DoMoSans sẽ hiện ô vuông "tofu" thay vì .notdef trống hoặc font hệ thống khác, để lộ rõ lỗ hổng glyph coverage */
+@font-face {
+  font-family: "Tofu";
+  src: url("data:font/ttf;base64,AAEAAAAMAIAAAwBAQ09MUgAAAAAAAATEAAAADkNQQUwAAQAOAAAE1AAAAA5PUy8yXy9eUgAAAUgAAABgY21hcAAu/PYAAAGwAAAAZGdseWYziTUFAAACHAAAAZ5oZWFkK9bSnAAAAMwAAAA2aGhlYQiyCF8AAAEEAAAAJGhtdHgFVwAzAAABqAAAAAZsb2NhAM8AAAAAAhQAAAAGbWF4cAAHAI8AAAEoAAAAIG5hbWUOASU8AAADvAAAANxwb3N0cGx5dAAABJgAAAArAAEAAAABAACG3ugeXw889QADBAAAAAAA4+LHcAAAAADj4sdwAFz/CwSeA7YAAAAGAAIAAAAAAAAAAQAAA7b/BgAABPsAXABdBJ4EAAAAAAAAAAAAAAAAAAAAAAEAAQAAAAIAjgAEAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAEBPsBkAAFAAQCmgJmAAAATQKaAmYAAAFmADMBMwAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABOT05FAMAAAAAgA7b/BgAAA7YA+gAAAAEAAAAAAgACzQAAACAAAAT7ADMAXAAAAAAAAwAAAAMAAAAcAAMAAQAAABwAAwAKAAAAPAAEACAAAAAEAAQAAQAAAAH//wAAAAH//wAAAAEAAAAAAA0AAAAAACgAAAAAAAAAAgAAAAIAAP4OAAAAAQAA/hAAEP//AAAAAQAAAAAAzwAAAAQAXP8LBJ4DtgAhAEYAdwCNAAATFBYXDgIXHgIXIT4CNzYmJic+AicuAichIg4CEyYmNTQ2NjMhMhYWFRQGBgceAhUUBgYjIS4CJyY2NjcmJiclNSIGBwYHBxcXNzY2NzY2MzIWFxYHFAcGBgcGBgcGBhUVMzU0Njc3NjY3NjU0JicmAzM2JicmBgcGBhUUFhcWFjMyNjc2Nlw3MzE1AxoZX3xGAZlGfF8ZGgM1MTE1AxoZX3xG/mdHe141ryouRHNHAZlHc0QvVDc4VjFFdEf+Z0FuSAkJKlo+HTIWAX4hLxIrDA4pKQgGDQkGFg0SFwoTAgsEFA4RGgYJBV8FBiQSHAgRGBcqDAIBFhISJg4KCQkKCRcMDBcJCgkCXEeDMTF+iEFBYjgDAzhiQUGIfjExfYlBQWI4AjZffv7yJWc4R3ZGRnZHOmZKERBKZjtHdkYBO2ZAQHVXEwgaFNgCDwwVKiAOEBsIDwQGBQgIEhoSDwgVDhEZDQwcDiQcChQIJhAeDiEgHy8VJv4gEyEHCAkPCBcMDRcICgkJCggXAAAAAAAGAE4AAwABBAkAAQAIAAAAAwABBAkAAgAOAAgAAwABBAkAAwAuABYAAwABBAkABAAYAEQAAwABBAkABQAaAFwAAwABBAkABgAYAHYAVABvAGYAdQBSAGUAZwB1AGwAYQByADEALgAwADAAMAA7AE4ATwBOAEUAOwBUAG8AZgB1AC0AUgBlAGcAdQBsAGEAcgBUAG8AZgB1ACAAUgBlAGcAdQBsAGEAcgBWAGUAcgBzAGkAbwBuACAAMQAuADAAMAAwAFQAbwBmAHUALQBSAGUAZwB1AGwAYQByAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAQIEdG9mdQAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAOAAAAAA==");
+  /* Glyph tofu gốc có advance width lớn hơn nhiều so với glyph DoMoSans cùng cỡ chữ, khiến nó
+     đè/dính vào ký tự bên cạnh khi làm fallback. size-adjust thu nhỏ em-box của Tofu để khớp
+     tỷ lệ với DoMoSans, không cần chỉnh font-size riêng cho từng trường hợp fallback. */
+  size-adjust: 65%;
+}
+/* Font tham khảo (VIETHOA.md mục 1.2) — Inter cũng có 2 trục opsz+wght như DoMoSans, dùng để đối chiếu
+   hình dạng dấu/mark tiếng Việt cạnh mỗi glyph DoMoSans trong bảng ký tự. */
+@font-face {
+  font-family: "Inter";
+  src: url("Reference/Inter-Variable.ttf") format("truetype-variations"),
+       url("Reference/Inter-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+  font-style: normal;
+}
+
+:root {
+  --bg: #ffffff;
+  --fg: #111111;
+  --muted: #666666;
+  --border: #e2e2e2;
+  --card-bg: #fafafa;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212;
+    --fg: #eaeaea;
+    --muted: #999999;
+    --border: #333333;
+    --card-bg: #1b1b1b;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121212; --fg: #eaeaea; --muted: #999999; --border: #333333; --card-bg: #1b1b1b;
+}
+:root[data-theme="light"] {
+  --bg: #ffffff; --fg: #111111; --muted: #666666; --border: #e2e2e2; --card-bg: #fafafa;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 2.5rem clamp(1rem, 4vw, 3rem);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+h2 { font-size: 1.15rem; font-weight: 600; margin: 4rem 0 1.25rem; }
+p.lede { color: var(--muted); font-size: 0.9rem; margin-top: 0; }
+.meta { color: var(--muted); font-size: 0.8rem; }
+
+.sample-block {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  background: var(--card-bg);
+}
+.sample-block .label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.sample-block .label code {
+  background: var(--border);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+}
+.sample-text {
+  font-family: "DoMoSans", "Tofu";
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+table.charmap {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  font-size: 0.8rem;
+}
+table.charmap th, table.charmap td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.6rem;
+  text-align: center;
+  vertical-align: middle;
+}
+table.charmap thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 2;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+table.charmap thead th:first-child,
+table.charmap tbody th {
+  position: sticky;
+  left: 0;
+  background: var(--bg);
+  z-index: 1;
+  font-family: ui-monospace, monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  width: 7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+table.charmap td.glyph {
+  padding: 0;
+  vertical-align: middle;
+}
+/* Moi o tach lam 2 phan xep chong: tren la ky tu chinh (DoMoSans), duoi la ky tu tham khao (Inter).
+   Moi phan co duong ke baseline/x-height/cap-height rieng, lay dung tu metrics that cua font
+   (hhea ascender/descender, OS/2 sCapHeight/sxHeight qua fontTools) -- khong uoc luong bang mat. */
+.glyph-strip {
+  padding-block: 1rem;
+}
+.glyph-strip + .glyph-strip {
+  border-top: 1px solid var(--border);
+}
+.glyph-strip .glyph-inner {
+  position: relative;
+  line-height: 1;
+  font-size: 3.3rem;
+}
+.glyph-strip .g-main,
+.glyph-strip .g-ref {
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+.glyph-strip .g-main { font-family: "DoMoSans", "Tofu"; }
+.glyph-strip .g-ref {
+  font-family: "Inter";
+  color: var(--muted);
+  opacity: 0.55;
+}
+.glyph-strip .guideline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid var(--border);
+  z-index: 0;
+}
+.glyph-strip .guideline.baseline { border-top-color: var(--muted); border-top-style: solid; }
+.glyph-strip .guideline.xheight,
+.glyph-strip .guideline.capheight { border-top-style: dashed; }
+table.charmap tbody tr:nth-child(even) { background: color-mix(in srgb, var(--card-bg) 60%, transparent); }
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+}
+.controls input[type="text"] {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.45rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 0.9rem;
+}
+.controls label { display: flex; align-items: center; gap: 0.35rem; color: var(--muted); }
+
+.sliders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 1.5rem 0 2rem;
+}
+.slider-group { flex: 1; min-width: 260px; }
+.slider-group .slider-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.slider-group .slider-head strong { color: var(--fg); font-family: ui-monospace, monospace; }
+.slider-group input[type="range"] {
+  width: 100%;
+  height: 16px;
+  box-sizing: border-box;
+  padding-inline: 8px; /* = bán kính thumb, để track thật trùng đúng khoảng travel 8px..(100%-8px) mà ticks/thumb dùng */
+  accent-color: var(--fg);
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+.slider-group input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+}
+.slider-group input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+}
+/* Thumb ẩn hoàn toàn (opacity, không phải background transparent — tránh browser tự vẽ viền/bóng
+   mặc định đè lên .thumb tự vẽ bên dưới). Chỉ giữ lại để bắt input/kéo; chấm hiển thị là .thumb,
+   dùng chung 1 công thức calc với .ticks nên luôn khớp tuyệt đối. */
+.slider-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  opacity: 0;
+  margin-top: -6px;
+}
+.slider-group input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 50%;
+  opacity: 0;
+}
+.slider-group .track {
+  position: relative;
+}
+.slider-group .thumb {
+  position: absolute;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--fg);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 3;
+}
+.slider-group .ticks {
+  position: relative;
+  height: 1.3rem;
+  margin-top: 0.3rem;
+  pointer-events: none;
+}
+.slider-group .ticks .tick {
+  position: absolute;
+  top: 0.5rem;
+  transform: translateX(-50%);
+  font-size: 0.65rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.slider-group .ticks .tick::before {
+  content: "";
+  position: absolute;
+  top: -0.45rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 0.35rem;
+  background: var(--border);
+}
+.slider-group .ticks .tick.master {
+  color: var(--fg);
+  font-weight: 600;
+}
+.slider-group .ticks .tick.master::before {
+  width: 2px;
+  height: 0.5rem;
+  background: var(--fg);
+}
+.style-toggle {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+.style-toggle button {
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.style-toggle button.active {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+
+footer { margin-top: 3rem; color: var(--muted); font-size: 0.75rem; }
+</style>
+</head>
+<body>
+
+<button id="theme-toggle" type="button" style="position:fixed; top:1rem; right:1rem; z-index:10; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid var(--border); background:var(--card-bg); color:var(--fg); font-size:0.8rem; cursor:pointer;">🌓 Theme</button>
+
+<h1>DoMo Sans — Vietnamese Coverage Preview</h1>
+<p class="lede">Kiểm tra hiển thị tiếng Việt trên DoMo Sans (variable, trục <code>opsz</code> 9–40, <code>wght</code> 100–1000) qua các master chính và toàn bộ bảng ký tự. Ký tự không có trong font sẽ fallback sang <a href="https://github.com/googlefonts/tofu" target="_blank" rel="noopener">tofu</a> (ô vuông đen) để lộ rõ glyph còn thiếu.</p>
+
+<h2>1. Preview content</h2>
+
+<div class="style-toggle">
+  <button type="button" class="active" data-style="normal">Roman</button>
+  <button type="button" data-style="italic">Italic</button>
+</div>
+
+<div class="sliders">
+  <div class="slider-group">
+    <div class="slider-head"><span>Optical size (<code>opsz</code>)</span><strong id="opsz-value">9pt</strong></div>
+    <div class="track">
+      <input type="range" id="opsz-slider" min="0" max="5" step="1" value="1" />
+      <div class="thumb" id="opsz-thumb"></div>
+      <div class="ticks" id="opsz-ticks"></div>
+    </div>
+  </div>
+  <div class="slider-group">
+    <div class="slider-head"><span>Weight (<code>wght</code>)</span><strong id="wght-value">Regular · 400</strong></div>
+    <div class="track">
+      <input type="range" id="wght-slider" min="0" max="9" step="1" value="3" />
+      <div class="thumb" id="wght-thumb"></div>
+      <div class="ticks" id="wght-ticks"></div>
+    </div>
+  </div>
+</div>
+
+<div class="sample-block">
+  <div class="label">
+    <span id="current-settings"><code></code></span>
+  </div>
+  <div class="sample-text" id="sample-text" style="font-size: clamp(1.1rem, 1.8vw, 1.6rem);"></div>
+</div>
+
+<h2>2. Char table — toàn bộ ký tự tiếng Việt</h2>
+<div class="controls">
+  <input type="text" id="filter" placeholder="Lọc theo ký tự hoặc nhóm, vd: ơ, â, đ…" />
+  <span class="meta" id="count"></span>
+</div>
+<div class="table-wrap">
+  <table class="charmap" id="charmap"></table>
+</div>
+
+<footer>
+  Font: DoMo Sans variable (<code>Sans/fonts/webfonts/DoMoSans[opsz,wght].woff2</code> / <code>-Italic</code>). Quy trình việt hoá: <a href="VIETHOA.md">VIETHOA.md</a>. Fallback notdef: googlefonts/tofu.
+</footer>
+
+<script>
+// 10 mức weight hiển thị theo STAT (Sans/Source/config.yaml) — dùng cho thanh trượt wght ở phần 1
+const WEIGHTS = [
+  { name: "Thin",       wght: 100 },
+  { name: "ExtraLight", wght: 200 },
+  { name: "Light",      wght: 300 },
+  { name: "Regular",    wght: 400 },
+  { name: "Medium",     wght: 500 },
+  { name: "SemiBold",   wght: 600 },
+  { name: "Bold",       wght: 700 },
+  { name: "ExtraBold",  wght: 800 },
+  { name: "Black",      wght: 900 },
+  { name: "ExtraBlack", wght: 1000 },
+];
+// 6 mốc opsz gốc theo STAT (Sans/Source/config.yaml) — dùng cho thanh trượt ở phần 1
+const OPSZ_STEPS = [
+  { name: "9pt",  opsz: 9 },
+  { name: "14pt", opsz: 14 },
+  { name: "18pt", opsz: 18 },
+  { name: "24pt", opsz: 24 },
+  { name: "36pt", opsz: 36 },
+  { name: "40pt", opsz: 40 },
+];
+
+// 12 master THẬT trong Sans/Source/DoMoSans.glyphs: opsz {9,24,40} x wght {Thin,Light,Regular,ExtraBlack}.
+// Bảng ký tự chỉ hiển thị đúng 12 master này — không phải lưới 6 opsz x 10 wght của STAT, để soi glyph
+// đúng những gì type designer thực sự vẽ tay, các mốc còn lại đều là nội suy.
+const TABLE_OPSZ = [
+  { name: "9pt",  opsz: 9 },
+  { name: "24pt", opsz: 24 },
+  { name: "40pt", opsz: 40 },
+];
+const TABLE_WEIGHTS = [
+  { name: "Thin",       wght: 100 },
+  { name: "Light",      wght: 300 },
+  { name: "Regular",    wght: 400 },
+  { name: "ExtraBlack", wght: 1000 },
+];
+
+function buildMasters() {
+  const list = [];
+  TABLE_OPSZ.forEach(o => {
+    TABLE_WEIGHTS.forEach(w => {
+      list.push({ label: `${w.name} · ${o.name}`, wght: w.wght, opsz: o.opsz });
+    });
+  });
+  return list;
+}
+
+const MASTERS = buildMasters();
+
+function varSettings(m) {
+  return `"opsz" ${m.opsz}, "wght" ${m.wght}`;
+}
+
+const PANGRAM = "Nhà văn hóa Việt Nam luôn trân trọng những giá trị truyền thống: từ tiếng mẹ đẻ ngọt ngào, những câu ca dao dân dã, đến các món ăn đậm đà bản sắc dân tộc. Dù ở đâu, người Việt vẫn giữ gìn ngôn ngữ ông cha để lại — đầy đủ sáu thanh điệu: ngang, huyền, hỏi, ngã, sắc, nặng — như một báu vật quý giá, không thể đánh mất theo năm tháng. ĂÂĐÊÔƠƯ ăâđêôơư — Ơ ơ Ư ư, Đ đ.";
+
+// --- Section 1: sliders (opsz theo 6 mốc gốc, wght theo 10 mốc STAT) ---
+// 12 master thật trong Sans/Source/DoMoSans.glyphs: 3 opsz (9/24/40pt) x 4 wght (Thin/Light/Regular/ExtraBlack).
+// Mọi mốc khác (14/18/36pt, ExtraLight/Medium/SemiBold/Bold/ExtraBold/Black) là nội suy, không phải master vẽ tay.
+const OPSZ_MASTER_INDICES = [0, 3, 5]; // 9pt, 24pt, 40pt trong OPSZ_STEPS
+const WGHT_MASTER_INDICES = [0, 2, 3, 9]; // Thin, Light, Regular, ExtraBlack trong WEIGHTS
+
+// 1 công thức calc dùng chung cho ticks lẫn thumb tự vẽ, đảm bảo luôn thẳng hàng tuyệt đối
+// (không dựa vào cách mỗi trình duyệt tự tính inset cho thumb native).
+function trackLeft(frac) {
+  return `calc(8px + ${frac} * (100% - 16px))`;
+}
+
+// 1 component chung cho mọi step (không tách steps/marks riêng), dùng cùng 1 công thức calc
+// để luôn thẳng hàng với vị trí thumb thật của <input type="range">.
+function renderTicks(containerId, labels, masterIndices) {
+  const el = document.getElementById(containerId);
+  labels.forEach((label, i) => {
+    const tick = document.createElement("div");
+    tick.className = "tick" + (masterIndices.includes(i) ? " master" : "");
+    tick.style.left = trackLeft(i / (labels.length - 1));
+    tick.textContent = label;
+    el.appendChild(tick);
+  });
+}
+renderTicks("opsz-ticks", OPSZ_STEPS.map(s => s.name), OPSZ_MASTER_INDICES);
+renderTicks("wght-ticks", WEIGHTS.map(w => String(w.wght)), WGHT_MASTER_INDICES);
+
+const opszSlider = document.getElementById("opsz-slider");
+const wghtSlider = document.getElementById("wght-slider");
+const opszThumb = document.getElementById("opsz-thumb");
+const wghtThumb = document.getElementById("wght-thumb");
+const opszValueEl = document.getElementById("opsz-value");
+const wghtValueEl = document.getElementById("wght-value");
+const currentSettingsEl = document.getElementById("current-settings");
+const sampleTextEl = document.getElementById("sample-text");
+let currentStyle = "normal";
+
+function updateSample() {
+  const o = OPSZ_STEPS[+opszSlider.value];
+  const w = WEIGHTS[+wghtSlider.value];
+  const settings = `"opsz" ${o.opsz}, "wght" ${w.wght}`;
+  opszValueEl.textContent = o.name;
+  wghtValueEl.textContent = `${w.name} · ${w.wght}`;
+  opszThumb.style.left = trackLeft(opszSlider.value / opszSlider.max);
+  wghtThumb.style.left = trackLeft(wghtSlider.value / wghtSlider.max);
+  currentSettingsEl.querySelector("code").textContent =
+    `font-variation-settings: ${settings}; font-style: ${currentStyle};`;
+  sampleTextEl.style.fontVariationSettings = settings;
+  sampleTextEl.style.fontStyle = currentStyle;
+  // opsz là point size thiết kế thật (theo spec OpenType opsz + STAT "Optical size"), quy đổi đúng
+  // 1pt CSS = 96/72 px — không dùng hệ số tuỳ ý — để font-size hiển thị luôn khớp với opsz đang set,
+  // tránh trường hợp mắt thấy 1 size nhưng font thực chất đang nội suy ở opsz khác.
+  sampleTextEl.style.fontSize = `${o.opsz * (96 / 72)}px`;
+  sampleTextEl.textContent = PANGRAM;
+}
+
+opszSlider.addEventListener("input", updateSample);
+wghtSlider.addEventListener("input", updateSample);
+document.querySelectorAll(".style-toggle button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".style-toggle button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentStyle = btn.dataset.style;
+    updateSample();
+  });
+});
+updateSample();
+
+// --- Char table generation ---
+// name theo chuẩn AGLFN cho combining mark (Adobe Glyph List for New Fonts), khớp tên
+// glyph thật dùng trong Sans/Source/DoMoSans.glyphs (vd acutecomb, dotbelowcomb...) —
+// bỏ hậu tố "comb" cho gọn khi ghép với tên base thành nhãn hàng, vd "adotbelow".
+const TONE_MARKS = [
+  { name: "",           mark: "" },
+  { name: "grave",      mark: "̀" },
+  { name: "hookabove",  mark: "̉" },
+  { name: "tilde",      mark: "̃" },
+  { name: "acute",      mark: "́" },
+  { name: "dotbelow",   mark: "̣" },
+];
+const VOWEL_GROUPS = ["a","ă","â","e","ê","i","o","ô","ơ","u","ư","y"];
+const PLAIN_CONSONANTS = ["b","c","d","g","h","k","l","m","n","p","q","r","s","t","v","x"];
+
+function compose(base, mark) {
+  if (!mark) return base;
+  return (base + mark).normalize("NFC");
+}
+
+const ENTRIES = [];
+VOWEL_GROUPS.forEach(v => {
+  TONE_MARKS.forEach(t => {
+    ENTRIES.push({ group: v, tone: t.name, lower: compose(v, t.mark), upper: compose(v.toUpperCase(), t.mark) });
+  });
+});
+ENTRIES.push({ group: "đ", tone: "", lower: "đ", upper: "Đ" });
+PLAIN_CONSONANTS.forEach(c => {
+  ENTRIES.push({ group: c, tone: "", lower: c, upper: c.toUpperCase() });
+});
+
+function glyphLikeName(group, tone, isUpper) {
+  const base = isUpper ? group.charAt(0).toUpperCase() + group.slice(1) : group;
+  return `${base}${tone}`;
+}
+
+// Metrics lay THANG tu bang that trong font (head.unitsPerEm, hhea.ascent/descent,
+// OS/2 sCapHeight/sxHeight) qua fontTools -- KHONG do gian tiep qua DOM/Canvas o runtime nua
+// (cach do truoc de sai lech vi khac API/khac cach trinh duyet layout text). Duoc regen tu dong
+// boi Scripts/gen_preview_font_metrics.py moi khi build font (xem Scripts/build_sans.sh).
+const RAW_FONT_METRICS = /* AUTOGEN:METRICS:START */
+{
+  "DoMoSans": {
+    "ascent": 0.992,
+    "descent": -0.31,
+    "capHeight": 0.7,
+    "xHeight": 0.526
+  },
+  "Inter": {
+    "ascent": 0.96875,
+    "descent": -0.2412109375,
+    "capHeight": 0.7275390625,
+    "xHeight": 0.5458984375
+  }
+}
+/* AUTOGEN:METRICS:END */;
+
+// line-height (em) = ascent - descent -> half-leading = 0 -> baseline cua dong chu (line-height:1
+// scale theo ty le nay) nam dung tai "ascent" tinh tu dinh khoi, khop chinh xac voi % duoi day vi
+// ca hai deu suy tu CUNG 1 bang metrics that.
+function toPercents(m) {
+  const total = m.ascent - m.descent;
+  return {
+    lineHeight: total,
+    baseline: (m.ascent / total) * 100,
+    capheight: ((m.ascent - m.capHeight) / total) * 100,
+    xheight: ((m.ascent - m.xHeight) / total) * 100,
+  };
+}
+const FONT_METRICS = {
+  DoMoSans: toPercents(RAW_FONT_METRICS.DoMoSans),
+  Inter: toPercents(RAW_FONT_METRICS.Inter),
+};
+
+function buildGlyphStrip(className, fontLabel, ch, variationSettings) {
+  const strip = document.createElement("div");
+  strip.className = "glyph-strip";
+  const inner = document.createElement("div");
+  inner.className = "glyph-inner";
+  const pct = FONT_METRICS[fontLabel];
+  inner.style.lineHeight = String(pct.lineHeight);
+  ["baseline", "xheight", "capheight"].forEach(key => {
+    const line = document.createElement("div");
+    line.className = `guideline ${key}`;
+    line.style.top = `${pct[key]}%`;
+    inner.appendChild(line);
+  });
+  const glyph = document.createElement("span");
+  glyph.className = className;
+  glyph.style.fontVariationSettings = variationSettings;
+  glyph.textContent = ch;
+  inner.appendChild(glyph);
+  strip.appendChild(inner);
+  return strip;
+}
+
+function buildTable() {
+  const table = document.getElementById("charmap");
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  headRow.innerHTML = `<th>Ký tự</th>` + MASTERS.map(m => `<th>${m.label}</th>`).join("");
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  ENTRIES.forEach(e => {
+    [e.upper, e.lower].forEach(ch => {
+      const tr = document.createElement("tr");
+      tr.dataset.group = e.group;
+      tr.dataset.char = ch;
+      const th = document.createElement("th");
+      const isUpper = ch === e.upper;
+      th.textContent = `${ch} · ${glyphLikeName(e.group, e.tone, isUpper)}`;
+      tr.appendChild(th);
+      MASTERS.forEach(m => {
+        const td = document.createElement("td");
+        td.className = "glyph";
+        td.appendChild(buildGlyphStrip("g-main", "DoMoSans", ch, varSettings(m)));
+        td.appendChild(buildGlyphStrip("g-ref", "Inter", ch, `"opsz" ${m.opsz}, "wght" ${m.wght}`));
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  });
+  table.appendChild(tbody);
+  document.getElementById("count").textContent = `${ENTRIES.length * 2} ký tự × ${MASTERS.length} master`;
+}
+buildTable();
+
+// Theme toggle — mặc định theo thiết bị (prefers-color-scheme), nút này chỉ ghi đè thủ công
+const themeBtn = document.getElementById("theme-toggle");
+const stored = localStorage.getItem("preview-theme");
+if (stored) document.documentElement.setAttribute("data-theme", stored);
+themeBtn.addEventListener("click", () => {
+  const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const current = document.documentElement.getAttribute("data-theme") || (systemDark ? "dark" : "light");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("preview-theme", next);
+});
+
+document.getElementById("filter").addEventListener("input", (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll("#charmap tbody tr").forEach(tr => {
+    const match = !q || tr.dataset.group.toLowerCase().includes(q) || tr.dataset.char.toLowerCase().includes(q);
+    tr.style.display = match ? "" : "none";
+  });
+});
+</script>
+</body>
+</html>
