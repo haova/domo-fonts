@@ -1,13 +1,13 @@
     sources:
-      - DMSans.glyphs
-      - DMSans-Italic.glyphs
+      - DoMoSans.glyphs
+      - DoMoSans-Italic.glyphs
     axisOrder:
       - opsz
       - wght
       - ital
-    familyName: DM Sans
+    familyName: DoMo Sans
     stat:
-      DMSans[opsz,wght].ttf:
+      DoMoSans[opsz,wght].ttf:
       - name: Optical size
         tag: opsz
         values:
@@ -55,7 +55,7 @@
           value: 0
           linkedValue: 1
           flags: 2
-      DMSans-Italic[opsz,wght].ttf:
+      DoMoSans-Italic[opsz,wght].ttf:
       - name: Optical size
         tag: opsz
         values:

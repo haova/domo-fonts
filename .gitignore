@@ -1,1 +1,9 @@
 .DS_Store
+.venv
+
+# Sinh ra khi build (gftools builder / fontmake), khong phai nguon
+*.ninja_log
+build.ninja
+instance_ufos/
+instance_ufo/
+master_ufo/
