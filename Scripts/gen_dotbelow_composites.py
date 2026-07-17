@@ -39,14 +39,14 @@ DOMO_SOURCES = [
     ROOT / "Sans/Source/DoMoSans-Italic.glyphs",
 ]
 
-# Base letter co san trong font (da xac nhan bang grep truoc khi viet script nay) -> co so de
-# ghep dotbelow. "ohorn"/"uhorn" (o+moc, u+moc) CHUA co glyph nen khong dua vao day.
+# Base letter co san trong font -> co so de ghep dotbelow. "ohorn"/"uhorn" (o+moc, u+moc) da duoc
+# tao boi Scripts/gen_horn_composites.py nen gio ghep duoc ợ/Ợ/ự/Ự (horn + dot below).
 BASES = [
     ("a", "A"), ("abreve", "Abreve"), ("acircumflex", "Acircumflex"),
     ("e", "E"), ("ecircumflex", "Ecircumflex"),
     ("i", "I"),
-    ("o", "O"), ("ocircumflex", "Ocircumflex"),
-    ("u", "U"),
+    ("o", "O"), ("ocircumflex", "Ocircumflex"), ("ohorn", "Ohorn"),
+    ("u", "U"), ("uhorn", "Uhorn"),
     ("y", "Y"),
 ]
 
@@ -55,8 +55,8 @@ BASE_CHAR = {
     "a": "a", "abreve": "ă", "acircumflex": "â",
     "e": "e", "ecircumflex": "ê",
     "i": "i",
-    "o": "o", "ocircumflex": "ô",
-    "u": "u",
+    "o": "o", "ocircumflex": "ô", "ohorn": "ơ",
+    "u": "u", "uhorn": "ư",
     "y": "y",
 }
 
@@ -77,16 +77,38 @@ def get_anchor(layer, name):
     return None
 
 
-def ensure_bottom_anchor(layer):
-    """Them anchor 'bottom' tai (x cua 'top', y=0) neu chua co. Tra ve anchor 'bottom'."""
+def ensure_bottom_anchor(font, layer):
+    """Them anchor 'bottom' tai (x cua 'top', y=0) neu chua co. Tra ve anchor 'bottom'.
+
+    Voi composite trong (vd ohorn/uhorn = o/u + horn, chua co anchor rieng): lay anchor 'bottom'
+    tu component base dau tien (o/u) — dotbelow bam TAM THAN CHU nen dung 'bottom' cua o/u la dung,
+    horn o vai phai khong anh huong."""
     bottom = get_anchor(layer, "bottom")
     if bottom is not None:
         return bottom
     top = get_anchor(layer, "top")
-    x = top.position.x if top is not None else round(layer.width / 2)
+    if top is not None:
+        x = top.position.x
+    elif layer.components:
+        # Composite thieu anchor: suy 'bottom' tu component base dau tien.
+        base_comp = layer.components[0]
+        base_layer = font.glyphs[base_comp.name].layers[layer.associatedMasterId]
+        base_bottom = get_anchor(base_layer, "bottom") or get_anchor(base_layer, "top")
+        off_x = base_comp.position.x if base_comp.position else 0
+        x = (base_bottom.position.x + off_x) if base_bottom is not None else round(layer.width / 2)
+    else:
+        x = round(layer.width / 2)
     bottom = GSAnchor("bottom", Point(round(x), 0))
     layer.anchors.append(bottom)
     return bottom
+
+
+def dot_below_width(mark_layer):
+    """Be rong bbox cua hinh dot trong glyph 'dotbelowcomb' o master nay (dot to dan theo weight)."""
+    xs = [n.position.x for p in mark_layer.paths for n in p.nodes]
+    if not xs:
+        return 0
+    return max(xs) - min(xs)
 
 
 def build_composite(font, base_name, char_key, is_upper, mark_glyph):
@@ -98,9 +120,8 @@ def build_composite(font, base_name, char_key, is_upper, mark_glyph):
     composite_char = composed_char(char_key, is_upper)
     composite_name = f"{base_name}dotbelow"
 
-    existing = font.glyphs[composite_name]
-    if existing is not None:
-        font.glyphs.remove(existing)
+    if font.glyphs[composite_name] is not None:
+        del font.glyphs[composite_name]
 
     new_glyph = GSGlyph(composite_name)
     new_glyph.category = "Letter"
@@ -110,13 +131,19 @@ def build_composite(font, base_name, char_key, is_upper, mark_glyph):
         base_layer = base_glyph.layers[master.id]
         mark_layer = mark_glyph.layers[master.id]
 
-        bottom = ensure_bottom_anchor(base_layer)
+        bottom = ensure_bottom_anchor(font, base_layer)
         mark_bottom = get_anchor(mark_layer, "_bottom")
         if mark_bottom is None:
             raise SystemExit(f"'dotbelowcomb' thieu anchor '_bottom' o master {master.name}")
 
         dx = round(bottom.position.x - mark_bottom.position.x)
         dy = round(bottom.position.y - mark_bottom.position.y)
+
+        # Truong hop dac biet cho 'y' thuong: 'y' co than cheo/duoi lech nen dot dat theo anchor
+        # 'bottom' trong bi lech trai so voi tam thi giac -> dich dot sang phai 1 be rong dot
+        # (do rieng tung master vi dot to dan theo weight).
+        if base_name == "y":
+            dx += round(dot_below_width(mark_layer))
 
         layer = GSLayer()
         layer.layerId = master.id

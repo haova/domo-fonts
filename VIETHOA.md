@@ -9,7 +9,7 @@ Quy trình đầy đủ, từ đầu đến cuối, để bổ sung hỗ trợ t
 - Đã có sẵn: `acutecomb`, `gravecomb`, `tildecomb`, `breve`, `circumflex` (phục vụ các ngôn ngữ Đông Âu).
 - Còn thiếu:
   - `hookabovecomb` (U+0309, dấu hỏi) và `dotbelowcomb` (dấu nặng) — 2 combining mark quan trọng nhất còn thiếu.
-  - Dấu móc (horn) cho `o`/`u`: `Ohorn`, `ohorn`, `Uhorn`, `uhorn`.
+  - Dấu móc `horn` (U+031B) cho `o`/`u` — 1 combining mark dùng chung, ghép vào base để dựng `Ohorn`, `ohorn`, `Uhorn`, `uhorn` (xem mục 2.5).
   - Toàn bộ 90 glyph trong khối Latin Extended Additional (U+1EA0–U+1EF9) — xem checklist đầy đủ ở mục 1.2.
   - Bit `Vietnamese` trong OS/2 `unicodeRanges` (bit 9) — hiện tại giá trị là `0,1,2,3,5,31,32,33,35,36,38,45,60,62`, chưa có 9.
 
@@ -64,7 +64,7 @@ python3 Scripts/diff_vietnamese_glyphs.py
 Kết quả: **90 glyph** còn thiếu, gồm:
 
 - 2 combining mark: `hookabovecomb` (U+0309), `dotbelowcomb` (U+0323).
-- 4 chữ horn gốc: `Ơ` `ơ` `Ư` `ư` (U+01A0, U+01A1, U+01AF, U+01B0).
+- 4 chữ horn gốc: `Ơ` `ơ` `Ư` `ư` (U+01A0, U+01A1, U+01AF, U+01B0). 4 chữ này dựng bằng cách ghép mark `horn` (U+031B) vào base `O`/`o`/`U`/`u` — xem mục 2.5. Bản thân `horn` là mark phụ trợ, không nằm trong 90 glyph bắt buộc của `GF_Latin_Vietnamese` nhưng vẫn phải thêm vào source để dựng được 4 chữ này.
 - 84 chữ ghép dấu thanh trong khối U+1EA0–U+1EF7, ví dụ: Ạ ạ Ả ả Ấ ấ Ầ ầ Ẩ ẩ Ẫ ẫ Ậ ậ Ắ ắ Ằ ằ Ẳ ẳ Ẵ ẵ Ặ ặ Ẹ ẹ Ẻ ẻ Ế ế Ề ề Ể ể Ễ ễ Ệ ệ Ỉ ỉ Ị ị Ọ ọ Ỏ ỏ Ố ố Ồ ồ Ổ ổ Ỗ ỗ Ộ ộ Ớ ớ Ờ ờ Ở ở Ỡ ỡ Ợ ợ Ụ ụ Ủ ủ Ứ ứ Ừ ừ Ử ử Ữ ữ Ự ự Ỵ ỵ Ỷ ỷ.
 - Đã xác nhận `Inter` bật bit 9 (`Vietnamese`) trong OS/2 `unicodeRanges`, `DM Sans` chưa bật — khớp với hiện trạng đã nêu ở mục 0.
 
@@ -81,14 +81,14 @@ Kết quả: **90 glyph** còn thiếu, gồm:
 
   Glyph, master, anchor đều lưu chung trong 1 file `.glyphs` (dạng plist text) theo từng khối `glyphname = ...` / `layers = (...)` / `anchors = (...)`. Vì `Sans/Source/config.yaml` đã khai báo đúng 2 file này ở mục `sources`, chỉ cần lưu file là bước build (mục 4) tự đọc glyph mới, không cần sửa `config.yaml`.
 
-### 2.2. Vẽ 2 combining mark còn thiếu
+### 2.2. Vẽ 3 combining mark còn thiếu
 
-Vẽ `hookabovecomb`, `dotbelowcomb`, đồng bộ phong cách (độ dày nét, khoảng cách, chiều cao) với mark có sẵn (`acutecomb`, `gravecomb`, `tildecomb`).
+Vẽ `hookabovecomb`, `dotbelowcomb`, `horn` (U+031B), đồng bộ phong cách (độ dày nét, khoảng cách, chiều cao) với mark có sẵn (`acutecomb`, `gravecomb`, `tildecomb`). `horn` là mark dùng chung để dựng Ơ/ơ/Ư/ư — chi tiết cách ghép ở mục 2.5, nhưng bản thân outline của nó cũng vẽ ở đây, cùng ràng buộc 12 master như 2 mark kia.
 
 - Phải vẽ ở **đủ 12 master thật** khai báo trong `Sans/Source/DoMoSans.glyphs` (và tương tự trong bản Italic) — không phải suy đoán theo tên hiển thị ở `stat:` trong `config.yaml`:
   - `opsz`: chỉ có master ở **9pt, 24pt, 40pt** (xem `name = "9pt Thin"`, `"24pt Thin"`, `"40pt Thin"`... trong file `.glyphs`) — **không có master riêng ở 14pt/18pt/36pt**, những mốc đó chỉ là tên hiển thị trong STAT, giá trị thực được nội suy.
   - `wght`: chỉ có master ở **Thin (100), Light (300), Regular (400), ExtraBlack (1000)** — **không có master riêng ở ExtraLight/Medium/SemiBold/Bold/ExtraBold/Black**, các weight này cũng chỉ là tên hiển thị trong STAT, nội suy từ 4 master trên.
-  - → Tổng cộng **3 opsz × 4 wght = 12 master** mỗi file nguồn (Roman/Italic), **không phải** lưới đầy đủ 6 opsz × 10 wght. Vẽ dư master ở các mốc không tồn tại (vd tự thêm master "18pt Bold") sẽ đi ngược cấu trúc designspace hiện có và không cần thiết — chỉ cần đảm bảo 2 mark mới + 90 glyph thiếu tồn tại đúng ở 12 master thật này, phần còn lại Glyphs tự nội suy qua `Axis Mappings` (custom parameter, ánh xạ user-value → design-value phi tuyến) đã khai báo sẵn.
+  - → Tổng cộng **3 opsz × 4 wght = 12 master** mỗi file nguồn (Roman/Italic), **không phải** lưới đầy đủ 6 opsz × 10 wght. Vẽ dư master ở các mốc không tồn tại (vd tự thêm master "18pt Bold") sẽ đi ngược cấu trúc designspace hiện có và không cần thiết — chỉ cần đảm bảo 3 mark mới (`hookabovecomb`, `dotbelowcomb`, `horn`) + 90 glyph thiếu tồn tại đúng ở 12 master thật này, phần còn lại Glyphs tự nội suy qua `Axis Mappings` (custom parameter, ánh xạ user-value → design-value phi tuyến) đã khai báo sẵn.
   - Xác minh nhanh số master: `grep -n 'name = "[0-9]*pt' Sans/Source/DoMoSans.glyphs`.
 - **Điều kiện bắt buộc để nội suy khớp (interpolation-compatible)**: cùng số lượng path/điểm, cùng thứ tự điểm, cùng hướng vẽ, cùng số lượng và tên anchor ở **mọi master**. Sai 1 điểm ở 1 master là đủ để các instance trung gian bị méo hoặc build lỗi.
 
@@ -114,13 +114,18 @@ Vẽ `hookabovecomb`, `dotbelowcomb`, đồng bộ phong cách (độ dày nét,
 ### 2.3. Thiết lập anchor system
 
 - Anchor cơ bản: `top`, `bottom`, `_top`, `_bottom` cho mark đơn (hookabovecomb, dotbelowcomb gắn thẳng lên base).
+- Anchor cho horn: **`horn` / `_horn`** — đặt tên riêng, tách hẳn khỏi `top`/`topright`, vì horn gắn vào **vai phải** thân chữ (không phải phía trên) và anchor này chỉ phục vụ đúng việc dựng Ơ/ơ/Ư/ư.
+  - `horn` đặt trên base `O`/`o`/`U`/`u`; `_horn` đặt trên chính glyph `horn` tại **cạnh trái-dưới** của horn (góc `(0, 0)` sau khi `gen_horn.py` chuẩn hoá bbox) — điểm "chân" horn "hàn" vào base.
+  - **Vị trí tham chiếu đã có sẵn**: `o`/`u` của DoMoSans **đã có anchor `topright`** đúng ở góc trên-phải — `o`: `topright = (547, 526)`, `u`: `(493, 526)` (đo ở master 9pt Thin) — dùng ngay toạ độ này làm điểm khởi đầu cho anchor `horn`, rồi tinh chỉnh theo mục 2.5. `O`/`U` **chưa có** `topright` (chỉ có `top`/`bottom`), phải đặt `horn` mới thủ công ở góc trên-phải (`O`: quanh x = width−sidebearing, y ≈ cap-height; `U`: tương tự).
+  - Không bắt chước font tham chiếu cho phần này: **Inter vẽ `ohorn`/`uhorn` là outline liền, không dùng component/anchor horn** — nên Inter không cho mẫu anchor horn để đối chiếu (khác với dotbelow/tone mark). Anchor horn ở đây là tự thiết kế cho DoMoSans.
+  - Chi tiết cách ghép + xử lý overlap ở mục 2.5.
 - Anchor riêng cho tổ hợp dấu chồng tiếng Việt: **`top_viet` / `_top_viet`** — khuyến nghị chính thức của Google tại [gf-guide/diacritics](https://googlefonts.github.io/gf-guide/diacritics.html), dùng cho trường hợp chồng 2 dấu (circumflex+tone, breve+tone), ví dụ ậ = a + circumflex + dotbelow, ẫ = a + circumflex + tilde.
   - Tách riêng khỏi `top`/`_top` để tránh xung đột vị trí với tổ hợp dấu của ngôn ngữ khác dùng chung base.
   - Mark vừa làm "base" cho mark khác vừa là "mark" gắn lên chữ cái (ví dụ circumflex phải nhận dotbelow chồng lên) cần có **cả hai** anchor: `top_viet` (để mark khác gắn vào) và `_top_viet` (để gắn vào base bên dưới).
 - **Tự động hoá để tránh sai số khi đặt tay**:
   - Glyphs có sẵn lệnh `Glyph → Set Anchors` — tự tính vị trí `top`/`bottom` theo bounding box, áp dụng hàng loạt cho mọi glyph đã chọn, ở từng master.
   - Component dùng chế độ **Automatic Alignment** — mark tự bám theo anchor của base, tự cập nhật nếu sau này sửa lại outline base.
-  - Với 2 mark hoàn toàn mới (`hookabovecomb`, `dotbelowcomb`), không có công thức sẵn để "Set Anchors" tự suy — nên đặt tay 1 lần ở 1 master chuẩn (dựa theo offset của `acutecomb`/`gravecomb` đã có), rồi dùng script Python trong Macro Panel (hoặc bộ [mekkablue scripts](https://github.com/mekkablue/Glyphs-Scripts), thư mục _Anchors_: "Add Anchors", "Check Anchors") để nhân bản sang các master còn lại và tự động rà soát anchor thiếu/lệch tên giữa các master.
+  - Với các mark hoàn toàn mới (`hookabovecomb`, `dotbelowcomb`, `horn`), không có công thức sẵn để "Set Anchors" tự suy — nên đặt tay 1 lần ở 1 master chuẩn (dựa theo offset của `acutecomb`/`gravecomb` đã có), rồi dùng script Python trong Macro Panel (hoặc bộ [mekkablue scripts](https://github.com/mekkablue/Glyphs-Scripts), thư mục _Anchors_: "Add Anchors", "Check Anchors") để nhân bản sang các master còn lại và tự động rà soát anchor thiếu/lệch tên giữa các master.
 
 ### 2.4. Dấu chồng cần thu nhỏ — ví dụ ắ = ă + dấu sắc
 
@@ -136,14 +141,38 @@ Cách làm — **vẽ riêng outline dẹt hơn, không scale toán học**:
 
 Áp dụng logic tương tự cho chữ hoa: dấu trên chữ hoa cần **rộng hơn, thấp hơn, dẹt hơn** so với chữ thường — dùng đúng pattern `.case` đã có sẵn trong font (`acutecomb.case`, `circumflexcomb.case`...), không scale từ bản chữ thường.
 
-### 2.5. Ơ/Ư — vẽ horn qua component hay vẽ hẳn glyph riêng
+### 2.5. Ơ/Ư — vẽ `horn` component rồi ghép vào `o`/`u`
 
-Có 2 cách, cả hai đều được Google chấp nhận (Google không quy định cách nào, chỉ quan tâm kết quả qua được QA):
+Không vẽ riêng 4 glyph `Ohorn`, `ohorn`, `Uhorn`, `uhorn` với outline độc lập nữa. Thay vào đó dùng **1 glyph `horn` (U+031B) dùng chung** rồi ghép vào base `O`/`o`/`U`/`u` qua anchor — cách này ít việc hơn, nhất quán hình dạng horn giữa 4 chữ, và sửa 1 chỗ là cập nhật cả 4.
 
-- **Component + anchor** (nhanh, dùng để thử nghiệm/nháp sớm): vẽ 1 `horn` component, gắn vào `o`/`u` qua anchor như mọi mark khác.
-  - Rủi ro đã được cộng đồng ghi nhận thực tế: dùng Automatic Alignment cho horn dễ bị **overlap và sidebearing sai** ở các weight đậm, vì horn cần "hàn" liền vào bụng/thân chữ chứ không chỉ đặt cạnh (xem thảo luận thực tế tại [Glyphs Forum](https://forum.glyphsapp.com/t/horn-diacritics-and-sidebearings/3563)).
-- **Vẽ hẳn glyph riêng** (khuyến nghị cho bản phát hành chính thức): vẽ `Ohorn`, `ohorn`, `Uhorn`, `uhorn` như 4 glyph độc lập, outline hoàn chỉnh ở mọi master — cho phép horn hoà liền vào thân chữ đúng theo từng weight, tránh vấn đề overlap nêu trên.
-  - Vẫn giữ anchor `top`/`top_viet` bình thường trên 4 glyph này, để 10 chữ ghép dấu thanh còn lại (`ớ ờ ở ỡ ợ`, `ứ ừ ử ữ ự` + bản hoa) vẫn tự ghép qua component+anchor như bình thường — không phải vẽ tay toàn bộ 20 chữ đó, chỉ 4 chữ gốc cần vẽ full outline.
+Cách làm:
+
+1. **Sinh glyph `horn` tự động bằng [`Scripts/gen_horn.py`](Scripts/gen_horn.py)** từ hình vẽ sẵn `Reference/horn.svg`:
+   - `horn.svg` chứa **4 path = 4 weight** (path1→4 = Thin/Light/Regular/ExtraBlack). **Không scale theo opsz** — với mỗi weight, cả 3 master opsz (9/24/40) dùng chung 1 horn, nên 4 hình phủ đủ 12 master (4 wght × 3 opsz).
+   - Script lật y (SVG y-down → glyphs y-up), chuẩn hoá góc trái-dưới bbox về `(0, 0)`, rồi đặt anchor **`_horn` tại `(0, 0)`** = cạnh trái-dưới của horn — đây là điểm "chân" horn để khớp với anchor `horn` của base.
+   - Đã xác nhận 4 path **cùng topology** (1 moveTo + 5 lineTo + 4 curveTo, 17 điểm/layer đồng nhất) → interpolation-compatible giữa các weight (đúng yêu cầu mục 2.2). Ghi vào cả `DoMoSans.glyphs` và `-Italic.glyphs`, category `Mark`/`Nonspacing`.
+
+   ```sh
+   python3 Scripts/gen_horn.py           # thêm --dry-run để xem trước, không ghi file
+   ```
+
+   Sau khi sinh, mở trong Glyphs soi lại vị trí `_horn` và độ khớp hình ở 4 weight trước khi ghép.
+2. **Thêm anchor `horn` cho base + ghép 4 composite tự động bằng [`Scripts/gen_horn_composites.py`](Scripts/gen_horn_composites.py)** (chạy sau `gen_horn.py`):
+   - Với `o`/`u`: script **dùng ngay anchor `topright` đã có sẵn** làm vị trí `horn` (mép phải, ngang x-height) — vd `o`: `(547, 526)`, `u`: `(493, 526)` ở master 9pt Thin.
+   - Với `O`/`U` (chưa có `topright`): script đo **xmax outline ở dải gần cap-height** đặt anchor `horn` tại `(xmax, cap-height)` làm **vị trí khởi đầu** — vd `O`: `(678, 700)`, `U`: `(541, 700)` ở master 9pt Thin. Đây chỉ là điểm tạm, **type designer soi mắt và tinh chỉnh lại trong Glyphs** cho horn ăn khít vai chữ.
+   - Sau đó script dựng 4 composite `ohorn`/`Ohorn`/`uhorn`/`Uhorn` (U+01A1/01A0/01B0/01AF) = base + `horn`, tính offset `= anchor horn(base) − anchor _horn(horn)` riêng cho từng master (không dựa Automatic Alignment vì chạy headless), ghi vào cả `DoMoSans.glyphs` và `-Italic.glyphs`.
+
+   ```sh
+   python3 Scripts/gen_horn_composites.py   # thêm --dry-run để xem trước
+   ```
+3. Kết quả: 4 composite có đủ 12 layer, mỗi layer 2 component (`base` + `horn`) — nội suy khớp giữa các master.
+4. Trên 4 composite này vẫn khai báo anchor `top`/`top_viet` bình thường, để 10 chữ ghép dấu thanh còn lại (`ớ ờ ở ỡ ợ`, `ứ ừ ử ữ ự` + bản hoa) tự ghép tiếp qua component+anchor như mọi chữ khác — không phải vẽ tay 20 chữ đó.
+
+**Lưu ý overlap/sidebearing**: dùng Automatic Alignment cho horn dễ bị **overlap và sidebearing sai** ở các weight đậm, vì horn cần "hàn" liền vào bụng/thân chữ chứ không chỉ đặt cạnh (xem thảo luận thực tế tại [Glyphs Forum](https://forum.glyphsapp.com/t/horn-diacritics-and-sidebearings/3563)). Khắc phục trong cùng cách component:
+
+- Tinh chỉnh vị trí anchor `horn` trên base ở **từng weight** (nhất là Regular→ExtraBlack) để horn ăn liền vào thân, không hở/không đè.
+- Nếu ở weight rất đậm vẫn hở mối nối, chỉnh lại outline `horn` ở master đậm đó (vẫn là 1 glyph component, không tách thành glyph độc lập) hoặc bù sidebearing thủ công trên composite.
+- Kiểm tra bằng "Show Interpolation" (ngoặc đỏ) và soi mắt ở Thin/Regular/ExtraBlack trước khi build.
 
 ### 2.6. Sinh composite glyphs tự động
 
@@ -195,7 +224,7 @@ Bắt buộc chạy đủ 3 bước sau trước khi coi font là "hỗ trợ ti
 | Bước | Nội dung                                                                                            | Ai làm        |
 | ---- | --------------------------------------------------------------------------------------------------- | ------------- |
 | 1    | Lấy glyph-list `GF_Latin_Vietnamese` + đối chiếu Inter → checklist 90 glyph                         | Kỹ thuật      |
-| 2    | Vẽ mark, horn, dấu chồng thu nhỏ, anchor (`top_viet`/`_top_viet`) trong Glyphs/FontLab, ở đủ master | Type designer |
+| 2    | Vẽ 3 mark (gồm `horn` dùng chung), dấu chồng thu nhỏ, anchor (`top_viet`/`_top_viet`, `horn`/`_horn`), ghép Ơ/ơ/Ư/ư qua component trong Glyphs, ở đủ master | Type designer |
 | 3    | Thêm bit 9 vào `unicodeRanges` trong `.glyphs`                                                      | Kỹ thuật      |
 | 4    | `gftools builder config.yaml`                                                                       | Kỹ thuật      |
 | 5    | fontbakery + hb-shape + gftools qa                                                                  | Kỹ thuật/QA   |
@@ -210,5 +239,5 @@ Các phần đã đối chiếu trực tiếp với tài liệu chính thức c�
 
 Các phần là kinh nghiệm thiết kế chung, Google không quy định bắt buộc:
 
-- Chọn vẽ horn standalone hay qua component+anchor (mục 2.5).
+- Cách dựng Ơ/Ư (dùng `horn` component ghép vào base thay vì vẽ 4 glyph standalone) và cách xử lý overlap/sidebearing của horn (mục 2.5).
 - Dùng FontLab 8 thay Glyphs App, dùng script mekkablue để tự động hoá anchor.

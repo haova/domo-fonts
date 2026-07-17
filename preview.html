@@ -15,7 +15,7 @@
   font-weight: 100 1000;
   font-stretch: 75% 125%;
   font-style: normal;
-  unicode-range: /* AUTOGEN:ROMAN:START */U+D, U+20-7E, U+A0-AC, U+AE-107, U+10A-11B, U+11E-123, U+126-133, U+136-137, U+139-148, U+14A-15B, U+15E-165, U+168-17E, U+18F, U+192, U+1FC-1FD, U+218-21B, U+237, U+259, U+2C6-2C7, U+2D8-2DD, U+300-304, U+306-30C, U+312, U+326-328, U+3C0, U+1E80-1E85, U+1E9E, U+1EA0-1EA3, U+1EAC-1EAD, U+1EB6-1EBD, U+1EC6-1ECF, U+1ED8-1ED9, U+1EE4-1EE7, U+1EF2-1EF9, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+2074, U+20A8, U+20AC, U+20B9-20BA, U+20BD, U+2113, U+2122, U+2126, U+212E, U+2190-2199, U+2202, U+2206, U+220F, U+2211-2212, U+2215, U+221A, U+221E, U+222B, U+2248, U+2260, U+2264-2265, U+25CA, U+FB01-FB02/* AUTOGEN:ROMAN:END */;
+  unicode-range: /* AUTOGEN:ROMAN:START */U+D, U+20-7E, U+A0-AC, U+AE-107, U+10A-11B, U+11E-123, U+126-133, U+136-137, U+139-148, U+14A-15B, U+15E-165, U+168-17E, U+18F, U+192, U+1A0-1A1, U+1AF-1B0, U+1FC-1FD, U+218-21B, U+237, U+259, U+2C6-2C7, U+2D8-2DD, U+300-304, U+306-30C, U+312, U+31B, U+326-328, U+3C0, U+1E80-1E85, U+1E9E, U+1EA0-1EF9, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+2074, U+20A8, U+20AC, U+20B9-20BA, U+20BD, U+2113, U+2122, U+2126, U+212E, U+2190-2199, U+2202, U+2206, U+220F, U+2211-2212, U+2215, U+221A, U+221E, U+222B, U+2248, U+2260, U+2264-2265, U+25CA, U+FB01-FB02/* AUTOGEN:ROMAN:END */;
 }
 @font-face {
   font-family: "DoMoSans";
@@ -24,7 +24,7 @@
   font-weight: 100 1000;
   font-stretch: 75% 125%;
   font-style: italic;
-  unicode-range: /* AUTOGEN:ITALIC:START */U+D, U+20-7E, U+A0-AC, U+AE-107, U+10A-11B, U+11E-123, U+126-133, U+136-137, U+139-148, U+14A-15B, U+15E-165, U+168-17E, U+18F, U+192, U+1FC-1FD, U+218-21B, U+237, U+259, U+2C6-2C7, U+2D8-2DD, U+300-304, U+306-30C, U+312, U+326-328, U+3C0, U+1E80-1E85, U+1E9E, U+1EA0-1EA3, U+1EAC-1EAD, U+1EB6-1EBD, U+1EC6-1ECF, U+1ED8-1ED9, U+1EE4-1EE7, U+1EF2-1EF9, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+2074, U+20A8, U+20AC, U+20B9-20BA, U+20BD, U+2113, U+2122, U+2126, U+212E, U+2190-2199, U+2202, U+2206, U+220F, U+2211-2212, U+2215, U+221A, U+221E, U+222B, U+2248, U+2260, U+2264-2265, U+25CA, U+FB01-FB02/* AUTOGEN:ITALIC:END */;
+  unicode-range: /* AUTOGEN:ITALIC:START */U+D, U+20-7E, U+A0-AC, U+AE-107, U+10A-11B, U+11E-123, U+126-133, U+136-137, U+139-148, U+14A-15B, U+15E-165, U+168-17E, U+18F, U+192, U+1A0-1A1, U+1AF-1B0, U+1FC-1FD, U+218-21B, U+237, U+259, U+2C6-2C7, U+2D8-2DD, U+300-304, U+306-30C, U+312, U+31B, U+326-328, U+3C0, U+1E80-1E85, U+1E9E, U+1EA0-1EF9, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+2074, U+20A8, U+20AC, U+20B9-20BA, U+20BD, U+2113, U+2122, U+2126, U+212E, U+2190-2199, U+2202, U+2206, U+220F, U+2211-2212, U+2215, U+221A, U+221E, U+222B, U+2248, U+2260, U+2264-2265, U+25CA, U+FB01-FB02/* AUTOGEN:ITALIC:END */;
 }
 /* Tofu fallback — mọi glyph không có trong DoMoSans sẽ hiện ô vuông "tofu" thay vì .notdef trống hoặc font hệ thống khác, để lộ rõ lỗ hổng glyph coverage */
 @font-face {
@@ -158,10 +158,20 @@ table.charmap td.glyph {
 .glyph-strip + .glyph-strip {
   border-top: 1px solid var(--border);
 }
+/* Box chiem cho co dinh (theo co hien thi dich ~ opsz lon nhat) de layout on dinh, du glyph ben
+   trong duoc render o point-size khac nhau theo opsz roi scale ve cung co hien thi. */
+.glyph-strip .glyph-scale {
+  position: relative;
+  height: 4.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
 .glyph-strip .glyph-inner {
   position: relative;
   line-height: 1;
-  font-size: 3.3rem;
+  /* font-size + transform:scale do JS dat theo opsz cua tung cot (buildGlyphStrip) */
 }
 .glyph-strip .g-main,
 .glyph-strip .g-ref {
@@ -188,12 +198,49 @@ table.charmap td.glyph {
 .glyph-strip .guideline.capheight { border-top-style: dashed; }
 table.charmap tbody tr:nth-child(even) { background: color-mix(in srgb, var(--card-bg) 60%, transparent); }
 
+/* O trong bang co the click de phong to soi ky tung net */
+table.charmap td.glyph { cursor: zoom-in; transition: background 0.12s; }
+table.charmap td.glyph:hover { background: color-mix(in srgb, var(--accent, #4a90d9) 14%, transparent); box-shadow: inset 0 0 0 2px var(--accent, #4a90d9); }
+
+/* Modal phong to */
+.zoom-overlay {
+  position: fixed; inset: 0; z-index: 50;
+  display: none; align-items: center; justify-content: center;
+  background: color-mix(in srgb, #000 62%, transparent);
+  backdrop-filter: blur(2px);
+  padding: 1.5rem;
+}
+.zoom-overlay.open { display: flex; }
+.zoom-dialog {
+  background: var(--card-bg); color: var(--fg);
+  border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.4);
+  max-width: min(920px, 96vw); max-height: 92vh;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.zoom-head {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.zoom-head .zoom-title { font-size: 1rem; font-weight: 600; }
+.zoom-head .zoom-title code { font-size: 0.85rem; color: var(--muted); font-weight: 400; }
+.zoom-head .spacer { flex: 1; }
+.zoom-head button {
+  padding: 0.35rem 0.7rem; border-radius: 6px; border: 1px solid var(--border);
+  background: var(--card-bg); color: var(--fg); font-size: 0.9rem; cursor: pointer; line-height: 1;
+}
+.zoom-head button:hover { background: color-mix(in srgb, var(--fg) 10%, var(--card-bg)); }
+.zoom-head .zoom-level { font-size: 0.85rem; color: var(--muted); min-width: 3.2em; text-align: center; }
+.zoom-body { overflow: auto; padding: 1.5rem; }
+.zoom-body .glyph-strip { padding-block: 1.5rem; }
+.zoom-body .glyph-strip .glyph-label {
+  font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em;
+}
+/* font-size cua glyph-inner trong modal do JS dat theo muc zoom */
+
 .table-wrap {
   overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  max-height: 80vh;
-  overflow-y: auto;
 }
 
 .controls {
@@ -360,7 +407,7 @@ footer { margin-top: 3rem; color: var(--muted); font-size: 0.75rem; }
   <div class="slider-group">
     <div class="slider-head"><span>Optical size (<code>opsz</code>)</span><strong id="opsz-value">9pt</strong></div>
     <div class="track">
-      <input type="range" id="opsz-slider" min="0" max="5" step="1" value="1" />
+      <input type="range" id="opsz-slider" min="0" max="14" step="1" value="0" />
       <div class="thumb" id="opsz-thumb"></div>
       <div class="ticks" id="opsz-ticks"></div>
     </div>
@@ -368,7 +415,7 @@ footer { margin-top: 3rem; color: var(--muted); font-size: 0.75rem; }
   <div class="slider-group">
     <div class="slider-head"><span>Weight (<code>wght</code>)</span><strong id="wght-value">Regular · 400</strong></div>
     <div class="track">
-      <input type="range" id="wght-slider" min="0" max="9" step="1" value="3" />
+      <input type="range" id="wght-slider" min="0" max="18" step="1" value="6" />
       <div class="thumb" id="wght-thumb"></div>
       <div class="ticks" id="wght-ticks"></div>
     </div>
@@ -391,33 +438,40 @@ footer { margin-top: 3rem; color: var(--muted); font-size: 0.75rem; }
   <table class="charmap" id="charmap"></table>
 </div>
 
+<div class="zoom-overlay" id="zoom-overlay" role="dialog" aria-modal="true" aria-label="Phóng to ký tự">
+  <div class="zoom-dialog">
+    <div class="zoom-head">
+      <span class="zoom-title" id="zoom-title"></span>
+      <span class="spacer"></span>
+      <button type="button" id="zoom-out" title="Thu nhỏ">−</button>
+      <span class="zoom-level" id="zoom-level">100%</span>
+      <button type="button" id="zoom-in" title="Phóng to">+</button>
+      <button type="button" id="zoom-close" title="Đóng (Esc)">✕</button>
+    </div>
+    <div class="zoom-body" id="zoom-body"></div>
+  </div>
+</div>
+
 <footer>
   Font: DoMo Sans variable (<code>Sans/fonts/webfonts/DoMoSans[opsz,wght].woff2</code> / <code>-Italic</code>). Quy trình việt hoá: <a href="VIETHOA.md">VIETHOA.md</a>. Fallback notdef: googlefonts/tofu.
 </footer>
 
 <script>
-// 10 mức weight hiển thị theo STAT (Sans/Source/config.yaml) — dùng cho thanh trượt wght ở phần 1
-const WEIGHTS = [
-  { name: "Thin",       wght: 100 },
-  { name: "ExtraLight", wght: 200 },
-  { name: "Light",      wght: 300 },
-  { name: "Regular",    wght: 400 },
-  { name: "Medium",     wght: 500 },
-  { name: "SemiBold",   wght: 600 },
-  { name: "Bold",       wght: 700 },
-  { name: "ExtraBold",  wght: 800 },
-  { name: "Black",      wght: 900 },
-  { name: "ExtraBlack", wght: 1000 },
-];
-// 6 mốc opsz gốc theo STAT (Sans/Source/config.yaml) — dùng cho thanh trượt ở phần 1
-const OPSZ_STEPS = [
-  { name: "9pt",  opsz: 9 },
-  { name: "14pt", opsz: 14 },
-  { name: "18pt", opsz: 18 },
-  { name: "24pt", opsz: 24 },
-  { name: "36pt", opsz: 36 },
-  { name: "40pt", opsz: 40 },
-];
+// Thanh trượt wght: mỗi step 50, từ 100 đến 1000 (19 mốc). Tên hiển thị chỉ đặt ở các mốc STAT
+// tròn trăm (Sans/Source/config.yaml), mốc giữa (150, 250…) để trống tên.
+const WGHT_NAMES = {
+  100: "Thin", 200: "ExtraLight", 300: "Light", 400: "Regular", 500: "Medium",
+  600: "SemiBold", 700: "Bold", 800: "ExtraBold", 900: "Black", 1000: "ExtraBlack",
+};
+const WEIGHTS = [];
+for (let w = 100; w <= 1000; w += 50) {
+  WEIGHTS.push({ name: WGHT_NAMES[w] || String(w), wght: w });
+}
+// Thanh trượt opsz: giữ 6 mốc STAT (9/14/18/24/36/40) + chèn điểm giữa mỗi cặp, rồi nối tiếp tới
+// 80pt (bước ~10 có điểm giữa). Font chỉ có 3 master opsz thật (9/24/40); mọi mốc khác là nội suy.
+const OPSZ_STEPS = [9, 11.5, 14, 16, 18, 21, 24, 30, 36, 38, 40, 50, 60, 70, 80].map(
+  opsz => ({ name: `${opsz}pt`, opsz })
+);
 
 // 12 master THẬT trong Sans/Source/DoMoSans.glyphs: opsz {9,24,40} x wght {Thin,Light,Regular,ExtraBlack}.
 // Bảng ký tự chỉ hiển thị đúng 12 master này — không phải lưới 6 opsz x 10 wght của STAT, để soi glyph
@@ -455,8 +509,8 @@ const PANGRAM = "Nhà văn hóa Việt Nam luôn trân trọng những giá tr�
 // --- Section 1: sliders (opsz theo 6 mốc gốc, wght theo 10 mốc STAT) ---
 // 12 master thật trong Sans/Source/DoMoSans.glyphs: 3 opsz (9/24/40pt) x 4 wght (Thin/Light/Regular/ExtraBlack).
 // Mọi mốc khác (14/18/36pt, ExtraLight/Medium/SemiBold/Bold/ExtraBold/Black) là nội suy, không phải master vẽ tay.
-const OPSZ_MASTER_INDICES = [0, 3, 5]; // 9pt, 24pt, 40pt trong OPSZ_STEPS
-const WGHT_MASTER_INDICES = [0, 2, 3, 9]; // Thin, Light, Regular, ExtraBlack trong WEIGHTS
+const OPSZ_MASTER_INDICES = [0, 6, 10]; // 9pt, 24pt, 40pt trong OPSZ_STEPS
+const WGHT_MASTER_INDICES = [0, 4, 6, 18]; // 100, 300, 400, 1000 (Thin/Light/Regular/ExtraBlack)
 
 // 1 công thức calc dùng chung cho ticks lẫn thumb tự vẽ, đảm bảo luôn thẳng hàng tuyệt đối
 // (không dựa vào cách mỗi trình duyệt tự tính inset cho thumb native).
@@ -469,10 +523,12 @@ function trackLeft(frac) {
 function renderTicks(containerId, labels, masterIndices) {
   const el = document.getElementById(containerId);
   labels.forEach((label, i) => {
+    const isMaster = masterIndices.includes(i);
     const tick = document.createElement("div");
-    tick.className = "tick" + (masterIndices.includes(i) ? " master" : "");
+    tick.className = "tick" + (isMaster ? " master" : "");
     tick.style.left = trackLeft(i / (labels.length - 1));
-    tick.textContent = label;
+    // Nhieu step -> chi ghi nhan o cac moc master that; moc giua chi la vach nho, tranh chong chu.
+    tick.textContent = isMaster ? label : "";
     el.appendChild(tick);
   });
 }
@@ -494,7 +550,8 @@ function updateSample() {
   const w = WEIGHTS[+wghtSlider.value];
   const settings = `"opsz" ${o.opsz}, "wght" ${w.wght}`;
   opszValueEl.textContent = o.name;
-  wghtValueEl.textContent = `${w.name} · ${w.wght}`;
+  // Moc STAT co ten chu (Regular…) -> "Regular · 400"; moc giua ten la so -> chi hien so 1 lan.
+  wghtValueEl.textContent = w.name === String(w.wght) ? `${w.wght}` : `${w.name} · ${w.wght}`;
   opszThumb.style.left = trackLeft(opszSlider.value / opszSlider.max);
   wghtThumb.style.left = trackLeft(wghtSlider.value / wghtSlider.max);
   currentSettingsEl.querySelector("code").textContent =
@@ -505,7 +562,25 @@ function updateSample() {
   // 1pt CSS = 96/72 px — không dùng hệ số tuỳ ý — để font-size hiển thị luôn khớp với opsz đang set,
   // tránh trường hợp mắt thấy 1 size nhưng font thực chất đang nội suy ở opsz khác.
   sampleTextEl.style.fontSize = `${o.opsz * (96 / 72)}px`;
-  sampleTextEl.textContent = PANGRAM;
+  renderSampleText(PANGRAM);
+}
+
+// Bao TUNG ky tu trong 1 <span> de trinh duyet fallback font THEO TUNG KY TU (giong char table),
+// thay vi ap 1 font cho ca doan text (per-run matching) — khi do ky tu ngoai unicode-range cua
+// DoMoSans se bi keo vao DoMoSans (hien .notdef) thay vi roi xuong "Tofu". Tach span thi ky tu
+// thieu hien dung o tofu, dong bo voi char table.
+function renderSampleText(text) {
+  const frag = document.createDocumentFragment();
+  for (const ch of text) {
+    if (ch === " ") {
+      frag.appendChild(document.createTextNode(" "));
+    } else {
+      const span = document.createElement("span");
+      span.textContent = ch;
+      frag.appendChild(span);
+    }
+  }
+  sampleTextEl.replaceChildren(frag);
 }
 
 opszSlider.addEventListener("input", updateSample);
@@ -594,13 +669,28 @@ const FONT_METRICS = {
   Inter: toPercents(RAW_FONT_METRICS.Inter),
 };
 
-function buildGlyphStrip(className, fontLabel, ch, variationSettings) {
+// opsz lon nhat trong bang lam moc "scale = 1" (moi opsz khac se scale len cho bang no).
+const MAX_TABLE_OPSZ = Math.max(...TABLE_OPSZ.map(o => o.opsz));
+// He so px goc cho 1pt hien thi. font-size that = opsz(pt) * PT_TO_PX -> phan anh dung point-size
+// vat ly theo opsz; sau do scale(MAX/opsz) dua moi o ve cung KICH THUOC HIEN THI (bang opsz lon nhat).
+const PT_TO_PX = 96 / 72;
+
+function buildGlyphStrip(className, fontLabel, ch, variationSettings, opsz) {
   const strip = document.createElement("div");
   strip.className = "glyph-strip";
+  const scaleBox = document.createElement("div");
+  scaleBox.className = "glyph-scale";
   const inner = document.createElement("div");
   inner.className = "glyph-inner";
   const pct = FONT_METRICS[fontLabel];
   inner.style.lineHeight = String(pct.lineHeight);
+  // Render o dung point-size vat ly theo opsz; scale nguoc lai (MAX/opsz) de moi o dong nhat
+  // kich thuoc hien thi. font-variation-settings da set opsz axis rieng nen glyph van duoc ve
+  // theo dung optical size cua cot do.
+  inner.style.fontSize = `${opsz * PT_TO_PX}px`;
+  inner.style.transform = `scale(${MAX_TABLE_OPSZ / opsz})`;
+  inner.style.transformOrigin = "center center";
+  inner.dataset.baseFontPx = String(opsz * PT_TO_PX); // luu de modal zoom tinh lai
   ["baseline", "xheight", "capheight"].forEach(key => {
     const line = document.createElement("div");
     line.className = `guideline ${key}`;
@@ -612,7 +702,8 @@ function buildGlyphStrip(className, fontLabel, ch, variationSettings) {
   glyph.style.fontVariationSettings = variationSettings;
   glyph.textContent = ch;
   inner.appendChild(glyph);
-  strip.appendChild(inner);
+  scaleBox.appendChild(inner);
+  strip.appendChild(scaleBox);
   return strip;
 }
 
@@ -637,8 +728,11 @@ function buildTable() {
       MASTERS.forEach(m => {
         const td = document.createElement("td");
         td.className = "glyph";
-        td.appendChild(buildGlyphStrip("g-main", "DoMoSans", ch, varSettings(m)));
-        td.appendChild(buildGlyphStrip("g-ref", "Inter", ch, `"opsz" ${m.opsz}, "wght" ${m.wght}`));
+        td.dataset.char = ch;
+        td.dataset.master = m.label;
+        td.dataset.name = glyphLikeName(e.group, e.tone, isUpper);
+        td.appendChild(buildGlyphStrip("g-main", "DoMoSans", ch, varSettings(m), m.opsz));
+        td.appendChild(buildGlyphStrip("g-ref", "Inter", ch, `"opsz" ${m.opsz}, "wght" ${m.wght}`, m.opsz));
         tr.appendChild(td);
       });
       tbody.appendChild(tr);
@@ -667,6 +761,69 @@ document.getElementById("filter").addEventListener("input", (e) => {
     const match = !q || tr.dataset.group.toLowerCase().includes(q) || tr.dataset.char.toLowerCase().includes(q);
     tr.style.display = match ? "" : "none";
   });
+});
+
+// --- Zoom modal: click 1 o de phong to soi tung net ---
+const ZOOM_STEPS = [3.3, 6, 9, 13, 18, 24]; // rem cho .glyph-inner (font-size)
+const zoomOverlay = document.getElementById("zoom-overlay");
+const zoomBody = document.getElementById("zoom-body");
+const zoomTitle = document.getElementById("zoom-title");
+const zoomLevelEl = document.getElementById("zoom-level");
+const ZOOM_DEFAULT_INDEX = 4; // 18rem = 200% (moc 100% la index 2 = 9rem)
+let zoomIndex = ZOOM_DEFAULT_INDEX;
+
+function applyZoomLevel() {
+  const rem = ZOOM_STEPS[zoomIndex];
+  // Trong modal: bo transform:scale goc cua bang (moi cot render dong nhat co theo rem), va bo
+  // rang buoc height cua glyph-scale de glyph phong to khong bi cat.
+  zoomBody.querySelectorAll(".glyph-inner").forEach(el => {
+    el.style.fontSize = `${rem}rem`;
+    el.style.transform = "none";
+  });
+  zoomBody.querySelectorAll(".glyph-scale").forEach(el => { el.style.height = "auto"; });
+  zoomLevelEl.textContent = `${Math.round(rem / ZOOM_STEPS[2] * 100)}%`;
+  document.getElementById("zoom-out").disabled = zoomIndex === 0;
+  document.getElementById("zoom-in").disabled = zoomIndex === ZOOM_STEPS.length - 1;
+}
+
+function openZoom(td) {
+  zoomBody.replaceChildren();
+  zoomTitle.innerHTML =
+    `${td.dataset.char} &nbsp;<code>${td.dataset.name} · ${td.dataset.master}</code>`;
+  // Clone 2 strip (DoMoSans + Inter), them nhan cho tung phan.
+  const labels = ["DoMo Sans", "Inter (tham khảo)"];
+  td.querySelectorAll(".glyph-strip").forEach((strip, i) => {
+    const clone = strip.cloneNode(true);
+    const lab = document.createElement("div");
+    lab.className = "glyph-label";
+    lab.textContent = labels[i] || "";
+    clone.insertBefore(lab, clone.firstChild);
+    zoomBody.appendChild(clone);
+  });
+  zoomIndex = ZOOM_DEFAULT_INDEX;
+  applyZoomLevel();
+  zoomOverlay.classList.add("open");
+}
+
+function closeZoom() { zoomOverlay.classList.remove("open"); }
+
+document.getElementById("charmap").addEventListener("click", (e) => {
+  const td = e.target.closest("td.glyph");
+  if (td) openZoom(td);
+});
+document.getElementById("zoom-close").addEventListener("click", closeZoom);
+zoomOverlay.addEventListener("click", (e) => { if (e.target === zoomOverlay) closeZoom(); });
+document.getElementById("zoom-in").addEventListener("click", () => {
+  if (zoomIndex < ZOOM_STEPS.length - 1) { zoomIndex++; applyZoomLevel(); }
+});
+document.getElementById("zoom-out").addEventListener("click", () => {
+  if (zoomIndex > 0) { zoomIndex--; applyZoomLevel(); }
+});
+document.addEventListener("keydown", (e) => {
+  if (!zoomOverlay.classList.contains("open")) return;
+  if (e.key === "Escape") closeZoom();
+  else if (e.key === "+" || e.key === "=") { if (zoomIndex < ZOOM_STEPS.length - 1) { zoomIndex++; applyZoomLevel(); } }
+  else if (e.key === "-" || e.key === "_") { if (zoomIndex > 0) { zoomIndex--; applyZoomLevel(); } }
 });
 </script>
 </body>

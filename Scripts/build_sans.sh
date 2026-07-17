@@ -37,6 +37,22 @@ fi
 # shellcheck disable=SC1091
 . "$VENV_DIR/bin/activate"
 
+# generate glyphs — THU TU QUAN TRONG (composite phu thuoc mark + composite ghep lop):
+#   1. Sinh cac MARK truoc (horn / dotbelowcomb / hookabovecomb).
+#   2. Sinh horn composite (ohorn/uhorn...) — vi dotbelow & hookabove con ghep len ohorn/uhorn
+#      de ra ợ/ự, ở/ử -> phai co ohorn/uhorn TRUOC.
+#   3. Sinh dotbelow & hookabove composite (chay sau cung).
+# Chay bang python cua .venv (dam bao co glyphsLib/fontTools tren may sach).
+python3 Scripts/gen_horn.py
+python3 Scripts/gen_dotbelowcomb.py
+python3 Scripts/gen_hookabovecomb.py
+python3 Scripts/gen_horn_composites.py
+python3 Scripts/gen_dotbelow_composites.py
+python3 Scripts/gen_hookabove_composites.py
+python3 Scripts/gen_tilde_composites.py
+python3 Scripts/gen_acute_composites.py
+python3 Scripts/gen_grave_composites.py
+
 cd "$ROOT_DIR/Sans/Source"
 gftools builder config.yaml
 
